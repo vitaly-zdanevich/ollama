@@ -41,6 +41,7 @@ type Capability string
 const (
 	CapabilityCompletion = Capability("completion")
 	CapabilityTools      = Capability("tools")
+	CapabilityInsert     = Capability("insert")
 )
 
 type registryOptions struct {
@@ -94,6 +95,11 @@ func (m *Model) CheckCapabilities(caps ...Capability) error {
 		case CapabilityTools:
 			if !slices.Contains(m.Template.Vars(), "tools") {
 				errs = append(errs, errors.New("tools"))
+			}
+		case CapabilityInsert:
+			vars := m.Template.Vars()
+			if !slices.Contains(vars, "suffix") {
+				errs = append(errs, errors.New("insert"))
 			}
 		default:
 			slog.Error("unknown capability", "capability", cap)
