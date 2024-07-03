@@ -183,7 +183,7 @@ func (s *Server) GenerateHandler(c *gin.Context) {
 			b.WriteString(s)
 		}
 
-		if err := tmpl.Execute(&b, template.Values{Messages: msgs}); err != nil {
+		if err := tmpl.Execute(&b, template.Values{Messages: msgs, Tools: req.Tools}); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -243,6 +243,11 @@ func (s *Server) GenerateHandler(c *gin.Context) {
 		}
 
 		r.Response = sb.String()
+		if toolCalls, ok := m.parseToolCalls(sb.String()); ok {
+			r.ToolCalls = toolCalls
+			r.Response = ""
+		}
+
 		c.JSON(http.StatusOK, r)
 		return
 	}
@@ -1197,11 +1202,11 @@ func (s *Server) ChatHandler(c *gin.Context) {
 
 	if req.Stream != nil && !*req.Stream {
 		var resp api.ChatResponse
-		var b bytes.Buffer
+		var sb strings.Builder
 		for rr := range ch {
 			switch t := rr.(type) {
 			case api.ChatResponse:
-				b.WriteString(t.Message.Content)
+				sb.WriteString(t.Message.Content)
 				resp = t
 			case gin.H:
 				msg, ok := t["error"].(string)
@@ -1217,8 +1222,8 @@ func (s *Server) ChatHandler(c *gin.Context) {
 			}
 		}
 
-		resp.Message.Content = b.String()
-		if toolCalls, ok := m.tryParseToolCalls(b.String()); ok {
+		resp.Message.Content = sb.String()
+		if toolCalls, ok := m.parseToolCalls(sb.String()); ok {
 			resp.Message.ToolCalls = toolCalls
 			resp.Message.Content = ""
 		}
