@@ -1049,7 +1049,7 @@ Advanced parameters:
 ```shell
 curl http://localhost:11434/api/embed -d '{
   "model": "all-minilm",
-  "input": ["Why is the sky blue?", "Why is the grass green?]
+  "input": ["Why is the sky blue?", "Why is the grass green?"]
 }'
 ```
 
@@ -1112,7 +1112,9 @@ A single JSON object will be returned.
 }
 ```
 
-## Generate Embeddings <span style="font-weight: lighter;">*Legacy*</span>
+## Generate Embedding
+
+> Note: this endpoint has been superseded by `/api/embed`
 
 ```shell
 POST /api/embeddings
