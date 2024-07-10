@@ -104,6 +104,7 @@ type CompletionRequest struct {
 	Stream           bool     `json:"stream"`
 	Temperature      *float32 `json:"temperature"`
 	TopP             float32  `json:"top_p"`
+	Suffix           string   `json:"suffix"`
 }
 
 type Completion struct {
@@ -379,6 +380,7 @@ func fromCompleteRequest(r CompletionRequest) (api.GenerateRequest, error) {
 		Prompt:  r.Prompt,
 		Options: options,
 		Stream:  &r.Stream,
+		Suffix:  r.Suffix,
 	}, nil
 }
 
