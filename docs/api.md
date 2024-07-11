@@ -1049,6 +1049,27 @@ Advanced parameters:
 ```shell
 curl http://localhost:11434/api/embed -d '{
   "model": "all-minilm",
+  "input": "Why is the sky blue?"
+}'
+```
+
+#### Response
+
+```json
+{
+  "model": "all-minilm",
+  "embeddings": [[
+    0.010071029, -0.0017594862, 0.05007221, 0.04692972, 0.054916814,
+    0.008599704, 0.105441414, -0.025878139, 0.12958129, 0.031952348
+  ]]
+}
+```
+
+#### Request (Batch Embeddings)
+
+```shell
+curl http://localhost:11434/api/embed -d '{
+  "model": "all-minilm",
   "input": ["Why is the sky blue?", "Why is the grass green?"]
 }'
 ```
