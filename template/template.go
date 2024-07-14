@@ -161,7 +161,7 @@ func (t *Template) Execute(w io.Writer, v Values) error {
 	var b bytes.Buffer
 	var prompt, response string
 	for _, m := range messages {
-		execute := func () error {
+		execute := func() error {
 			if err := t.Template.Execute(&b, map[string]any{
 				"System":   system,
 				"Prompt":   prompt,
